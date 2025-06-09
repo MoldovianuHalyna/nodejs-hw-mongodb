@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { pinoHttp } from 'pino-http';
+import { getEnvVar } from './utils/getEnvVar.js';
 
 export const setupServer = () => {
   const app = express();
