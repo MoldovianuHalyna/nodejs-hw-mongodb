@@ -27,6 +27,10 @@ export const setupServer = () => {
     });
   });
 
+  app.get('/', (req, res) => {
+    res.send('<h1>Hello</h1>');
+  });
+
   app.get('/contacts/:contactId', async (req, res) => {
     const { contactId } = req.params;
 
