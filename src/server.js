@@ -1,10 +1,10 @@
 import express from 'express';
 import cors from 'cors';
-
-import { getContacts, getContactById } from './services/contacts.js';
 import { logger } from './middlewares/logger.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
+
+import contactsRouter from './routers/contacts.js';
 
 export const setupServer = () => {
   const app = express();
@@ -13,37 +13,7 @@ export const setupServer = () => {
 
   app.use(logger);
 
-  app.get('/contacts', async (req, res) => {
-    const contactsData = await getContacts();
-
-    res.json({
-      status: 200,
-      message: 'Successfully found contacts!',
-      contactsData,
-    });
-  });
-
-  app.get('/', (req, res) => {
-    res.send('<h1>Contacts main page</h1>');
-  });
-
-  app.get('/contacts/:contactId', async (req, res) => {
-    const { contactId } = req.params;
-
-    const contactData = await getContactById(contactId);
-
-    if (!contactData) {
-      return res.status(404).json({
-        message: 'Contact not found',
-      });
-    }
-
-    res.json({
-      status: 200,
-      message: `Successfully found contact with id ${contactId}!`,
-      contactData,
-    });
-  });
+  app.use('/contacts', contactsRouter);
 
   app.use(errorHandler);
 
