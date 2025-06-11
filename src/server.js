@@ -10,11 +10,8 @@ export const setupServer = () => {
   const app = express();
   app.use(cors());
   app.use(express.json());
-
+  app.use(express.static('public'));
   app.use(logger);
-  app.get('/', (req, res) => {
-    res.send('<h1>Contacts main page</h1>');
-  });
 
   app.use('/contacts', contactsRouter);
 
