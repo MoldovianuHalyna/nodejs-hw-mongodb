@@ -12,6 +12,9 @@ export const setupServer = () => {
   app.use(express.json());
 
   app.use(logger);
+  app.get('/', (req, res) => {
+    res.send('<h1>Contacts main page</h1>');
+  });
 
   app.use('/contacts', contactsRouter);
 
