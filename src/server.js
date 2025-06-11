@@ -1,21 +1,17 @@
 import express from 'express';
 import cors from 'cors';
-import pinoHttp from 'pino-http';
 
 import { getContacts, getContactById } from './services/contacts.js';
+import { logger } from './middlewares/logger.js';
+import { errorHandler } from './middlewares/errorHandler.js';
+import { notFoundHandler } from './middlewares/notFoundHandler.js';
 
 export const setupServer = () => {
   const app = express();
   app.use(cors());
   app.use(express.json());
 
-  // app.use(
-  //   pinoHttp({
-  //     transport: {
-  //       target: 'pino-pretty',
-  //     },
-  //   }),
-  // );
+  app.use(logger);
 
   app.get('/contacts', async (req, res) => {
     const contactsData = await getContacts();
@@ -49,19 +45,9 @@ export const setupServer = () => {
     });
   });
 
-  app.use((error, req, res, next) => {
-    const { status, message } = error;
-    res.status(status).json({
-      status,
-      message,
-    });
-  });
+  app.use(errorHandler);
 
-  app.get((req, res) => {
-    res.status(404).json({
-      message: 'Not found',
-    });
-  });
+  app.get(notFoundHandler);
 
   const port = Number(process.env.PORT) || 3000;
 
