@@ -30,7 +30,14 @@ const contactSchema = new Schema(
     timestamps: true,
   },
 );
+
 contactSchema.post('save', saveErrorHandler);
+
+contactSchema.pre('findOneAndUpdate', function (next) {
+  (this.options.new = true), (this.options.runValidators = true), next();
+});
+
+contactSchema.post('findOneAndUpdate', saveErrorHandler);
 
 const ContactCollection = model('Contact', contactSchema);
 
