@@ -6,9 +6,12 @@ import {
   deleteContactById,
 } from '../services/contacts.js';
 import createHttpError from 'http-errors';
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 
 export const getContactController = async (req, res) => {
-  const contactsData = await getContacts();
+  const { page, perPage } = parsePaginationParams(req.query);
+
+  const contactsData = await getContacts({ page, perPage });
 
   res.json({
     status: 200,
@@ -44,7 +47,7 @@ export const patchContactByIdController = async (req, res) => {
   const result = await updateContactById(contactId, req.body);
   if (!result) throw createHttpError(404, 'Contact not found');
   res.json({
-    status: '200',
+    status: 200,
     message: 'Successfully patched a contact!',
     data: result.data,
   });
