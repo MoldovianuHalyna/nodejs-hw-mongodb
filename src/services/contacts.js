@@ -1,6 +1,10 @@
 import ContactCollection from '../db/models/Contact.js';
 
-export const getContacts = () => ContactCollection.find();
+export const getContacts = ({ page = 1, perPage = 10 }) => {
+  const skip = (page - 1) * perPage;
+
+  return ContactCollection.find().skip(skip).limit(perPage);
+};
 
 export const getContactById = (id) => ContactCollection.findById(id);
 
