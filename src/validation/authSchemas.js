@@ -13,3 +13,12 @@ export const registerSchema = Joi.object({
     'any.required': 'The password field is required',
   }),
 });
+
+export const loginSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required().messages({
+    'any.required': 'The e-mail field is required',
+  }),
+  password: Joi.string().min(6).max(20).required().messages({
+    'any.required': 'The password field is required',
+  }),
+});
