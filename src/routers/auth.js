@@ -16,6 +16,10 @@ authRouter.get('/register', (req, res) => {
   res.json({ message: 'Register endpoint is live!' });
 });
 
+authRouter.get('/login', (req, res) => {
+  res.json({ message: 'Login endpoint is live!' });
+});
+
 authRouter.post(
   '/register',
   validateBody(registerSchema),
