@@ -1,5 +1,8 @@
 import { Schema, model } from 'mongoose';
 
+import { emailRegexp } from '../../constants/auth-constants.js';
+import { saveErrorHandler, setUpdateSettings } from './hooks.js';
+
 const userSchema = new Schema(
   {
     name: {
@@ -8,8 +11,9 @@ const userSchema = new Schema(
     },
     email: {
       type: String,
-      required: true,
       unique: true,
+      match: emailRegexp,
+      required: true,
     },
     password: {
       type: String,
@@ -22,6 +26,12 @@ const userSchema = new Schema(
   },
 );
 
-const User = model('User', userSchema);
+userSchema.post('save', saveErrorHandler);
 
-export default User;
+userSchema.pre('findOneAndUpdate', setUpdateSettings);
+
+userSchema.post('findOneAndUpdate', saveErrorHandler);
+
+const UserCollection = model('user', userSchema);
+
+export default UserCollection;
