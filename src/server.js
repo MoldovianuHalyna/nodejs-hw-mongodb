@@ -1,9 +1,11 @@
 import express from 'express';
 import cors from 'cors';
+
 import { logger } from './middlewares/logger.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 
+import authRouter from './routers/auth.js';
 import contactsRouter from './routers/contacts.js';
 
 export const setupServer = () => {
@@ -16,6 +18,7 @@ export const setupServer = () => {
   app.use(express.static('public'));
   app.use(logger);
 
+  app.use('/auth', authRouter);
   app.use('/contacts', contactsRouter);
 
   app.use(errorHandler);
