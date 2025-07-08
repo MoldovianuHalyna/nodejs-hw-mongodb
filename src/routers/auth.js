@@ -1,6 +1,10 @@
 import { Router } from 'express';
 
-import { loginController, registerController } from '../controllers/auth.js';
+import {
+  loginController,
+  registerController,
+  refreshController,
+} from '../controllers/auth.js';
 
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validateBody } from '../utils/validateBody.js';
@@ -30,4 +34,6 @@ authRouter.post(
   validateBody(loginSchema),
   ctrlWrapper(loginController),
 );
+
+authRouter.post('/refresh', ctrlWrapper(refreshController));
 export default authRouter;
