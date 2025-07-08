@@ -9,15 +9,15 @@ import { loginSchema, registerSchema } from '../validation/authSchemas.js';
 
 const authRouter = Router();
 authRouter.get('/', (req, res) => {
-  res.json({ message: 'Auth endpoint is live!' });
+  res.json({ message: 'Welcome to authentification page' });
 });
 
 authRouter.get('/register', (req, res) => {
-  res.json({ message: 'Register endpoint is live!' });
+  res.json({ message: 'Welcome to register page' });
 });
 
 authRouter.get('/login', (req, res) => {
-  res.json({ message: 'Login endpoint is live!' });
+  res.json({ message: 'Welcome to login page' });
 });
 
 authRouter.post(

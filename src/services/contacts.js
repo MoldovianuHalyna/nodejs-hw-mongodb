@@ -7,14 +7,23 @@ export const getContacts = async ({
   perPage = 10,
   sortBy,
   sortOrder = sortList[0],
+  filters = {},
 }) => {
   const skip = (page - 1) * perPage;
+  const query = ContactCollection.find();
 
-  const items = await ContactCollection.find()
+  if (filters.userId) {
+    query.where('userId').equals(filters.userId);
+  }
+  if (filters.type) {
+    query.where('type').equals(filters.type);
+  }
+  const totalItems = await ContactCollection.countDocuments(query.getFilter());
+
+  const items = await query
     .skip(skip)
     .limit(perPage)
     .sort({ [sortBy]: sortOrder });
-  const totalItems = await ContactCollection.countDocuments();
 
   const paginationData = calcaPaginationData({ page, perPage, totalItems });
 
@@ -27,12 +36,12 @@ export const getContacts = async ({
   };
 };
 
-export const getContactById = (id) => ContactCollection.findById(id);
+export const getContact = (query) => ContactCollection.findOne(query);
 
 export const addContact = (payload) => ContactCollection.create(payload);
 
-export const updateContactById = async (id, payload, options = {}) => {
-  const result = await ContactCollection.findByIdAndUpdate(id, payload, {
+export const updateContact = async (query, payload, options = {}) => {
+  const result = await ContactCollection.findOneAndUpdate(query, payload, {
     includeResultMetadata: true,
     ...options,
   });
@@ -46,5 +55,5 @@ export const updateContactById = async (id, payload, options = {}) => {
   };
 };
 
-export const deleteContactById = (id) =>
-  ContactCollection.findByIdAndDelete(id);
+export const deleteContact = (query) =>
+  ContactCollection.findOneAndDelete(query);
