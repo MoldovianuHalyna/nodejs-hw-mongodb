@@ -1,9 +1,18 @@
-import { registerUser, loginUser, refreshUser } from '../services/auth.js';
+import {
+  registerUser,
+  loginUser,
+  refreshUser,
+  logoutUser,
+} from '../services/auth.js';
 
 import { refreshTokenLifetime } from '../constants/auth-constants.js';
 
-const setupSession = (res, { refreshToken }) => {
+const setupSession = (res, { _id, refreshToken }) => {
   res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    expires: new Date(Date.now() + refreshTokenLifetime),
+  });
+  res.cookie('sessionId', _id, {
     httpOnly: true,
     expires: new Date(Date.now() + refreshTokenLifetime),
   });
@@ -46,4 +55,14 @@ export const refreshController = async (req, res) => {
       accessToken: session.accessToken,
     },
   });
+};
+
+export const logoutController = async (req, res) => {
+  if (req.cookies.sessionId) {
+    await logoutUser(req.cookies.sessionId);
+  }
+  res.clearCookie('refreshToken');
+  res.clearCookie('sessionId');
+
+  res.status(204).send();
 };
