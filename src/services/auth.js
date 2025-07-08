@@ -67,3 +67,7 @@ export const refreshUser = async ({ refreshToken }) => {
     ...session,
   });
 };
+
+export const logoutUser = (_id) => {
+  SessionCollection.findOneAndDelete(_id);
+};
