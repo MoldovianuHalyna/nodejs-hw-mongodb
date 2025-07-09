@@ -11,6 +11,8 @@ import { parseSortParams } from '../utils/parseSortParams.js';
 import { contactsSortFields } from '../db/models/Contact.js';
 import { parseContactFilters } from '../utils/filters/parseContactFilters.js';
 import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
+import { getEnvVar } from '../utils/getEnvVar.js';
 
 export const getContactController = async (req, res) => {
   const { _id: userId } = req.user;
@@ -60,14 +62,18 @@ export const patchContactByIdController = async (req, res) => {
   const photo = req.file;
 
   let photoUrl;
-  if (photo) {
-    photoUrl = await saveFileToUploadDir(photo);
-  }
 
+  if (photo) {
+    if (getEnvVar('ENABLE_CLOUDINARY') === 'true') {
+      photoUrl = await saveFileToCloudinary(photo);
+    } else {
+      photoUrl = await saveFileToUploadDir(photo);
+    }
+  }
   const result = await updateContact(
     { _id: contactId, userId },
     { ...req.body, photo: photoUrl },
-  ); ///check if it's correct
+  );
 
   if (!result) throw createHttpError(404, 'Contact not found');
   res.json({
