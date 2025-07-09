@@ -2,6 +2,7 @@ import createHttpError from 'http-errors';
 import bcrypt from 'bcrypt';
 import { randomBytes } from 'node:crypto';
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
 import UserCollection from '../db/models/User.js';
 import SessionCollection from '../db/models/Session.js';
@@ -14,6 +15,7 @@ import {
 import { SMTP } from '../constants/index.js';
 import { getEnvVar } from '../utils/getEnvVar.js';
 import { sendEmail } from '../utils/sendEmail.js';
+dotenv.config();
 
 const createSession = () => ({
   accessToken: randomBytes(30).toString('base64'),
