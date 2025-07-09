@@ -10,6 +10,7 @@ import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { contactsSortFields } from '../db/models/Contact.js';
 import { parseContactFilters } from '../utils/filters/parseContactFilters.js';
+import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 
 export const getContactController = async (req, res) => {
   const { _id: userId } = req.user;
@@ -56,7 +57,18 @@ export const addContactController = async (req, res) => {
 export const patchContactByIdController = async (req, res) => {
   const { contactId } = req.params;
   const { _id: userId } = req.user;
-  const result = await updateContact({ _id: contactId, userId }, req.body);
+  const photo = req.file;
+
+  let photoUrl;
+  if (photo) {
+    photoUrl = await saveFileToUploadDir(photo);
+  }
+
+  const result = await updateContact(
+    { _id: contactId, userId },
+    { ...req.body, photo: photoUrl },
+  ); ///check if it's correct
+
   if (!result) throw createHttpError(404, 'Contact not found');
   res.json({
     status: 200,
