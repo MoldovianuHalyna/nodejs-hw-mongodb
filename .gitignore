@@ -1,9 +1,11 @@
 /node_modules
 
 .env
+.env.example
+
+uploads/ 
+temp/
 
 .vscode
 .DS_Store
 .idea
-.env.example
-.uploads
