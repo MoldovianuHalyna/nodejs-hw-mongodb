@@ -300,7 +300,7 @@
     "/contacts/{id}": {
       "get": {
         "tags": [
-          "contacts"
+          "Contacts"
         ],
         "summary": "Get contact by id",
         "operationId": "getContactById",
