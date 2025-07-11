@@ -1,5 +1,7 @@
 import path from 'node:path';
-import { resolve } from 'node:path';
+
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
 export const TEMPLATES_DIR = path.join(process.cwd(), 'src', 'templates');
 
@@ -22,4 +24,7 @@ export const CLOUDINARY = {
   API_SECRET: 'API_SECRET',
 };
 
-export const SWAGGER_PATH = resolve('docs', 'swagger.json');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export const SWAGGER_PATH = join(__dirname, '..', '..', 'docs', 'swagger.json');
