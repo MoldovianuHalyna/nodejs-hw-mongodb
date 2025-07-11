@@ -9,6 +9,7 @@ import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import authRouter from './routers/auth.js';
 import contactsRouter from './routers/contacts.js';
 import { UPLOAD_DIR } from './constants/index.js';
+import { swaggerDocs } from './middlewares/swaggerDocs.js';
 
 export const setupServer = () => {
   const app = express();
@@ -19,6 +20,8 @@ export const setupServer = () => {
 
   app.use(express.static('public'));
   app.use(logger);
+
+  app.use('/api-docs', swaggerDocs());
 
   app.use('/auth', authRouter);
   app.use('/contacts', contactsRouter);

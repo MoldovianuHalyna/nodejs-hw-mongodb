@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { resolve } from 'node:path';
 
 export const TEMPLATES_DIR = path.join(process.cwd(), 'src', 'templates');
 
@@ -20,3 +21,5 @@ export const CLOUDINARY = {
   API_KEY: 'API_KEY',
   API_SECRET: 'API_SECRET',
 };
+
+export const SWAGGER_PATH = resolve('docs', 'swagger.json');
